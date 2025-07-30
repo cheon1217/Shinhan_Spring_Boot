@@ -30,7 +30,7 @@ public interface BoardRepository extends JpaRepository<Board, Long>, SearchBoard
     @Query("SELECT b, w, count(r) " +
             " FROM Board b LEFT JOIN b.writer w " +
             " LEFT OUTER JOIN Reply r ON r.board = b" +
-            " WHERE b.bno = :bno")
+            " WHERE b.bno = :bno GROUP BY b")
     Object getBoardByBno(@Param("bno") Long bno);
 
 }

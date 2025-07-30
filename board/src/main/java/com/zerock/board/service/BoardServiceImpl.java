@@ -49,6 +49,9 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardDTO get(Long bno) {
         Object result = repository.getBoardByBno(bno);
+        if (result == null) {
+            throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다: bno = " + bno);
+        }
         Object[] arr = (Object[]) result;
         return entityToDTO((Board) arr[0], (Member) arr[1], (Long) arr[2]);
     }
