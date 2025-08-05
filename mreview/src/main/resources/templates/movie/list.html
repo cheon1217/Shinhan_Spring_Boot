@@ -55,7 +55,44 @@
         </ul>
 
         <script th:inline="javascript">
+            $(document).ready(function () {
 
+                // 모든 영화 행 순회
+                $("tbody tr").each(function () {
+                    const row = $(this);
+                    const mnoLink = row.find("th a");
+
+                    if (mnoLink.length === 0) return;
+
+                    // href에서 mno 추출
+                    const urlParams = new URLSearchParams(mnoLink.prop("search"));
+                    const mno = urlParams.get("mno");
+
+                    if (!mno) return;
+
+                    // Ajax로 리뷰 정보 가져오기
+                    $.ajax({
+                        url: '/reviews/' + mno + '/all',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (reviews) {
+                            const reviewCnt = reviews.length;
+                            const avg = reviewCnt > 0
+                                ? (reviews.reduce((sum, r) => sum + r.grade, 0) / reviewCnt).toFixed(1)
+                                : 0;
+
+                            // Review Count 업데이트 (3번째 컬럼)
+                            row.find("td").eq(1).html("<b>" + reviewCnt + "</b>");
+                            // Avg 업데이트 (4번째 컬럼)
+                            row.find("td").eq(2).html("<b>" + avg + "</b>");
+                        },
+                        error: function (xhr, status, err) {
+                            console.error("리뷰 정보 불러오기 실패:", err);
+                        }
+                    });
+                });
+
+            });
         </script>
     </th:block>
 </th:block>
