@@ -19,10 +19,3 @@ export const fetchHistory = async (id, limit = 30) => {
     return [];
   }
 };
-
-// OHLC 데이터 조회
-export async function fetchOhlc(stockId) {
-  const res = await fetch(`/api/stocks/${stockId}/ohlc`);
-  if (!res.ok) throw new Error('Failed to load OHLC data');
-  return await res.json(); // [{ time, open, high, low, close }]
-};

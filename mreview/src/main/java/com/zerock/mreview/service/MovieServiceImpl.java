@@ -1,6 +1,7 @@
 package com.zerock.mreview.service;
 
 import com.zerock.mreview.dto.MovieDTO;
+import com.zerock.mreview.dto.MovieImageDTO;
 import com.zerock.mreview.dto.PageRequestDTO;
 import com.zerock.mreview.dto.PageResultDTO;
 import com.zerock.mreview.entity.Movie;
@@ -67,7 +68,7 @@ public class MovieServiceImpl implements MovieService {
 
         Movie movie = (Movie) result.get(0)[0]; // Movie 엔티티느 가장 앞에 존재 - 모든 Row가 동일한 값
 
-        List<MovieImage> movieImageList = new ArrayList<>(); // 영화으이 이미지 개수만큼 MovieImage 객체 필요
+        List<MovieImage> movieImageList = new ArrayList<>(); // 영화의 이미지 개수만큼 MovieImage 객체 필요
 
         result.forEach(arr -> {
             MovieImage movieImage = (MovieImage) arr[1];
@@ -80,4 +81,29 @@ public class MovieServiceImpl implements MovieService {
         return entitiesToDTO(movie, movieImageList, avg, reviewCnt);
     }
 
+    @Transactional
+    @Override
+    public void addImages(Long mno, List<MovieImageDTO> images) {
+        Movie movie = movieRepository.findById(mno)
+                .orElseThrow(() -> new IllegalArgumentException("Movie not found: " + mno));
+
+        if (images == null || images.isEmpty()) return;
+
+        for (MovieImageDTO dto : images) {
+            MovieImage image = MovieImage.builder()
+                    .uuid(dto.getUuid())
+                    .imgName(dto.getImgName())
+                    .path(dto.getPath())
+                    .movie(movie)
+                    .build();
+            imageRepository.save(image);
+        }
+    }
+
+    @Transactional
+    @Override
+    public boolean removeImage(Long mno, String uuid) {
+        int deleted = imageRepository.deleteByMovieAndUuid(mno, uuid);
+        return deleted > 0;
+    }
 }

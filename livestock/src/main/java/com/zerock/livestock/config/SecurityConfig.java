@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // 공개 API
-                        .requestMatchers("/auth/**", "/ws-stock/**", "/api/stocks/**", "/api/stocks/**/ohlc").permitAll()
+                        .requestMatchers("/auth/**", "/ws-stock/**", "/api/stocks/**").permitAll()
                         // 관심종목은 로그인 필요
                         .requestMatchers("/api/watchlist/**").authenticated()
                         // 나머지는 기본 인증 필요

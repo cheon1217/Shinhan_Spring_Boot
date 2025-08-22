@@ -1,6 +1,5 @@
 package com.zerock.livestock.controller;
 
-import com.zerock.livestock.dto.OhlcResponse;
 import com.zerock.livestock.dto.StockResponse;
 import com.zerock.livestock.service.StockService;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +37,4 @@ public class StockController {
         return stockService.getRecentPrices(id, limit);
     }
 
-    @GetMapping("/{id}/ohlc")
-    public ResponseEntity<List<OhlcResponse>> getOhlcChart(@PathVariable Long id) {
-        List<OhlcResponse> ohlcData = stockService.getOhlcChartData(id);
-        return ResponseEntity.ok(ohlcData);
-    }
 }

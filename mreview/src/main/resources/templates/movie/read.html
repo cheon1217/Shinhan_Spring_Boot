@@ -33,6 +33,7 @@
             }
 
             .uploadResult ul li {
+                position: relative;
                 list-style: none;
                 padding: 10px;
                 margin-left: 2em;
@@ -41,11 +42,23 @@
             .uploadResult ul li img {
                 width: 100px;
             }
+
+            .img-remove {
+                position: relative;
+                top: 6px;
+                right: 6px;
+                z-index: 3;
+            }
         </style>
 
         <div class="uploadResult">
             <ul>
-                <li th:each="movieImage: ${dto.imageDTOList}" th:data-file="${movieImage.getThumbnailURL()}">
+                <li th:each="movieImage: ${dto.imageDTOList}"
+                    th:data-file="${movieImage.getImageURL()}"
+                    th:data-uuid="${movieImage.uuid}"
+                    th:data-path="${movieImage.path}"
+                    th:data-name="${movieImage.imgName}">
+                    <button type="button" class="btn btn-sm btn-danger img-remove">삭제</button>
                     <img th:if="${movieImage.path != null}" th:src="|/display?fileName=${movieImage.getThumbnailURL()}|">
                 </li>
             </ul>

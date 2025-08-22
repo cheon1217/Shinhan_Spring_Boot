@@ -20,6 +20,9 @@ public interface MovieService {
 
     MovieDTO getMovie(Long mno);
 
+    void addImages(Long mno, List<MovieImageDTO> images);
+    boolean removeImage(Long mno, String uuid);
+
     default MovieDTO entitiesToDTO(Movie movie, List<MovieImage> movieImages, Double avg, Long reviewCnt) {
         MovieDTO movieDTO = MovieDTO.builder()
                 .mno(movie.getMno())

@@ -1,6 +1,5 @@
 package com.zerock.livestock.service;
 
-import com.zerock.livestock.dto.OhlcResponse;
 import com.zerock.livestock.dto.StockResponse;
 import com.zerock.livestock.entity.Stock;
 import com.zerock.livestock.repository.PriceHistoryRepository;
@@ -62,21 +61,6 @@ public class StockServiceImpl implements StockService {
         List<BigDecimal> desc = priceHistoryRepository.findRecentPrices(stockId, p); // 최신→과거
         Collections.reverse(desc); // 과거→최신 순서로 반환 (차트용)
         return desc;
-    }
-
-    @Override
-    public List<OhlcResponse> getOhlcChartData(Long stockId) {
-        List<Object[]> rawList = priceHistoryRepository.getOhlcData(stockId);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return rawList.stream()
-                .map(arr -> new OhlcResponse(
-                        LocalDateTime.parse((String) arr[0], formatter), // time 변환
-                        new BigDecimal(arr[1].toString()), // open
-                        (BigDecimal) arr[2], // high
-                        (BigDecimal) arr[3], // low
-                        new BigDecimal(arr[4].toString()) // close
-                ))
-                .toList();
     }
 
     private StockResponse toDto(Stock s) {

@@ -7,6 +7,7 @@ const StockChart = ({ symbol, priceHistory, height = 80, mini = true }) => {
 
   useEffect(() => {
     if (!chartRef.current || !priceHistory || priceHistory.length === 0) return;
+
     const ctx = chartRef.current.getContext('2d');
     if (chartInstance.current) chartInstance.current.destroy();
 
@@ -39,7 +40,11 @@ const StockChart = ({ symbol, priceHistory, height = 80, mini = true }) => {
     });
   }, [priceHistory, symbol, mini]);
 
-  return <canvas ref={chartRef} style={{ height }} />;
+  return (
+    <div style={{ height: `${height}px` }}>
+      <canvas ref={chartRef} />
+    </div>
+  );
 };
 
 export default StockChart;

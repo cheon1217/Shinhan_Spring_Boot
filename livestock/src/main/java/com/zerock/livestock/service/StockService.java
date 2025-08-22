@@ -1,6 +1,5 @@
 package com.zerock.livestock.service;
 
-import com.zerock.livestock.dto.OhlcResponse;
 import com.zerock.livestock.dto.StockResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,5 +18,4 @@ public interface StockService {
 
     List<BigDecimal> getRecentPrices(Long stockId, int limit);
 
-    List<OhlcResponse> getOhlcChartData(Long stockId);
 }
