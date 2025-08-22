@@ -18,8 +18,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-stock")
                 .setAllowedOriginPatterns("*")
-                .addInterceptors(jwtHandshakeInterceptor)
-                .withSockJS();  // SockJS fallback 사용
+                .addInterceptors(jwtHandshakeInterceptor);
     }
 
     @Override

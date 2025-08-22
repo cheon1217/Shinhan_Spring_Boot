@@ -1,6 +1,7 @@
 package com.zerock.livestock.service;
 
 import com.zerock.livestock.config.SecurityUtils;
+import com.zerock.livestock.dto.WatchlistResponse;
 import com.zerock.livestock.entity.Stock;
 import com.zerock.livestock.entity.User;
 import com.zerock.livestock.entity.Watchlist;
@@ -26,7 +27,7 @@ public class WatchlistServiceImpl implements WatchlistService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Stock stock = stockRepository.findBySymbol(stockSymbol)
+        Stock stock = stockRepository.findBySymbolIgnoreCase(stockSymbol)
                 .orElseThrow(() -> new RuntimeException("Stock not found"));
 
         if (watchlistRepository.existsByUserAndStock(user, stock)) {
@@ -47,7 +48,7 @@ public class WatchlistServiceImpl implements WatchlistService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Stock stock = stockRepository.findBySymbol(stockSymbol)
+        Stock stock = stockRepository.findBySymbolIgnoreCase(stockSymbol)
                 .orElseThrow(() -> new RuntimeException("Stock not found"));
 
         Watchlist watchlist = watchlistRepository.findByUserAndStock(user, stock)
@@ -57,14 +58,21 @@ public class WatchlistServiceImpl implements WatchlistService {
     }
 
     @Override
-    public List<Stock> getUserWatchlist() {
+    public List<WatchlistResponse> getUserWatchlist() {
         String username = SecurityUtils.getCurrentUsername();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return watchlistRepository.findAllByUser(user)
                 .stream()
-                .map(Watchlist::getStock)
+                .map(watchlist -> {
+                    Stock stock = watchlist.getStock();
+                    return WatchlistResponse.builder()
+                            .stockId(stock.getId())
+                            .symbol(stock.getSymbol())
+                            .name(stock.getName())
+                            .build();
+                })
                 .toList();
     }
 }

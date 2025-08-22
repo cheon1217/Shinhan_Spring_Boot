@@ -6,11 +6,8 @@ const WatchlistButton = ({ stockId, initialInWatchlist }) => {
 
   const toggleWatchlist = async () => {
     try {
-      if (inWatchlist) {
-        await removeFromWatchlist(stockId);
-      } else {
-        await addToWatchlist(stockId);
-      }
+      if (inWatchlist) await removeFromWatchlist(stockId);
+      else await addToWatchlist(stockId);
       setInWatchlist(!inWatchlist);
     } catch (err) {
       console.error('관심 종목 변경 실패:', err);
@@ -19,7 +16,10 @@ const WatchlistButton = ({ stockId, initialInWatchlist }) => {
   };
 
   return (
-    <button onClick={toggleWatchlist}>
+    <button
+      className={`btn btn-sm ${inWatchlist ? 'btn-warning' : 'btn-outline-warning'}`}
+      onClick={toggleWatchlist}
+    >
       {inWatchlist ? '★ 관심 해제' : '☆ 관심 추가'}
     </button>
   );

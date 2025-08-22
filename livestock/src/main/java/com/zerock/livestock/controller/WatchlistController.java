@@ -1,7 +1,8 @@
 package com.zerock.livestock.controller;
 
+import com.zerock.livestock.config.SecurityUtils;
+import com.zerock.livestock.dto.WatchlistResponse;
 import com.zerock.livestock.entity.Stock;
-import com.zerock.livestock.entity.Watchlist;
 import com.zerock.livestock.service.WatchlistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/watchlist")
 @RequiredArgsConstructor
@@ -30,7 +30,9 @@ public class WatchlistController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Stock>> getUserWatchlist() {
-        return ResponseEntity.ok(watchlistService.getUserWatchlist());
+    public ResponseEntity<List<WatchlistResponse>> getUserWatchlist() {
+        List<WatchlistResponse> watchlist = watchlistService.getUserWatchlist();
+        return ResponseEntity.ok(watchlist);
     }
+
 }

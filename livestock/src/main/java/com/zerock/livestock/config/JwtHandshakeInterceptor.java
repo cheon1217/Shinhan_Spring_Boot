@@ -21,7 +21,19 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) {
 
         if (request instanceof ServletServerHttpRequest servletRequest) {
-            String token = servletRequest.getServletRequest().getParameter("token");
+            var httpServletRequest = servletRequest.getServletRequest();
+
+            // 1. query string → token=...
+            String token = httpServletRequest.getParameter("token");
+
+            // 2. Authorization 헤더에서 추출
+            if (token == null || token.isBlank()) {
+                String authHeader = httpServletRequest.getHeader("Authorization");
+                if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                    token = authHeader.substring(7);
+                }
+            }
+
             if (token != null && !token.isBlank()) {
                 try {
                     String username = jwtUtil.extractUsername(token);

@@ -9,4 +9,3 @@ public class SecurityUtils {
         return authentication != null ? authentication.getName() : null;
     }
 }
-
